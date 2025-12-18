@@ -14,7 +14,7 @@
 						<a th:href="@{/recipe/detail(no=${vo.no})}"> <img th:src="${vo.poster}"
 							style="width: 240px; height: 160px" th:title="${vo.title}">
 							<div class="caption">
-							   <p class="text-left"><a href="${/recipe/chef_list(chef=${vo.chef})}">[[${vo.chef}]] 님의</a></p>
+							   <p class="text-left"><a th:href="@{/recipe/chef_list(chef=${vo.chef})}">[[${vo.chef}]] 님의</a></p>
 								<p>[[${vo.title}]]</p>
 							</div>
 						</a>

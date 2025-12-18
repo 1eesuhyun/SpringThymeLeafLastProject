@@ -24,4 +24,5 @@ public interface RecipeService {
 	public RecipeDetailVO recipeDetailData(int no);
 	public List<RecipeVO> recipeTop10();
 	public List<RecipeVO> recipeChefListData(int start,String chef);
+	public int recipeChefTotalPage(String chef);
 }

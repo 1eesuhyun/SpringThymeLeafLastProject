@@ -90,7 +90,27 @@ public class RecipeController {
 	public String recipe_chef_list(@RequestParam(name="page",required = false) String page,Model model,@RequestParam("chef") String chef)
 	{
 		
-		model.addAttribute("page", page);
+		if(page==null)
+			page="1";
+		int curpage=Integer.parseInt(page);
+		// 현재 페이지 데이터 읽기
+		int start=(curpage-1)*12;
+		List<RecipeVO> list=rservice.recipeChefListData(start, chef);
+		// 0, 12, 24
+		int totalpage=rservice.recipeChefTotalPage(chef);
+		
+		final int BLOCK=10;
+		int startPage=((curpage-1)/BLOCK*BLOCK)+1;
+		int endPage=((curpage-1)/BLOCK*BLOCK)+BLOCK;
+		if(endPage>totalpage)
+			endPage=totalpage;
+		
+		model.addAttribute("list", list);
+		model.addAttribute("curpage", curpage);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("totalpage", totalpage);
+		model.addAttribute("endPage", endPage);
+		model.addAttribute("chef", chef);
 		model.addAttribute("main_html", "recipe/chef_list");
 		return "main/main";
 	}

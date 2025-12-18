@@ -28,7 +28,7 @@ public interface RecipeMapper {
 			+ "FROM recipe "
 			+ "WHERE no IN(SELECT no FROM recipe "
 			+ "INTERSECT SELECT no FROM recipedetail) "
-			+ "ORDER BY no ASC"
+			+ "ORDER BY no ASC "
 			+ "OFFSET #{start} ROWS FETCH NEXT 12 ROWS ONLY")
 	public List<RecipeVO> recipeListData(int start);
 	
@@ -58,4 +58,9 @@ public interface RecipeMapper {
 			+ "ORDER BY no ASC "
 			+ "OFFSET #{start} ROWS FETCH NEXT 12 ROWS ONLY")
 	public List<RecipeVO> recipeChefListData(@Param("start")int start,@Param("chef")String chef);
+	
+	@Select("SELECT CEIL(COUNT(*)/12.0) FROM recipe "
+			+ "WHERE REGEXP_LIKE(chef,#{chef})")
+	public int recipeChefTotalPage(String chef);
+	
 }

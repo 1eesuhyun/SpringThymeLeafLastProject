@@ -48,4 +48,10 @@ public class RecipeServiceImpl implements RecipeService{
 		return mapper.recipeChefListData(start, chef);
 	}
 
+	@Override
+	public int recipeChefTotalPage(String chef) {
+		// TODO Auto-generated method stub
+		return mapper.recipeChefTotalPage(chef);
+	}
+
 }
