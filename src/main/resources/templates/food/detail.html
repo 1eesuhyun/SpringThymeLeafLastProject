@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/assets/css/card.css}">
+</head>
+<body>
+	<div id="main-wrapper">
+		<div class="container detailcolor">
+			<div class="row">
+		  <table class="table">
+		   <tbody>
+		    <tr>
+		     <td width="30%" class="text-center" rowspan="9">
+		      <img th:src="${vo.poster}" style="width: 300px;height: 300px;margin-top:20px;">
+		     </td>
+		     <td colspan="2">
+		      <h3>[[${vo.name}]]&nbsp;<span style="color:orange;">[[${vo.score}]]</span></h3>
+		     </td>
+		    </tr>
+		    <tr>
+		     <td class="text-center" style="color: gray;" width="15%">주소</td>
+		     <td width="55%">[[${vo.address}]]</td>
+		    </tr>
+		    <tr>
+		     <td class="text-center" style="color: gray;" width="15%">전화</td>
+		     <td width="55%">[[${vo.phone}]]</td>
+		    </tr>
+		    <tr>
+		     <td class="text-center" style="color: gray;" width="15%">음식종류</td>
+		     <td width="55%">[[${vo.type}]]</td>
+		    </tr>
+		    <tr>
+		     <td class="text-center" style="color: gray;" width="15%">가격대</td>
+		     <td width="55%">[[${vo.price}]]</td>
+		    </tr>
+		    <tr>
+		     <td class="text-center" style="color: gray;" width="15%">영업시간</td>
+		     <td width="55%">[[${vo.time}]]</td>
+		    </tr>
+		    <tr>
+		     <td class="text-center" style="color: gray;" width="15%">주차</td>
+		     <td width="55%">[[${vo.parking}]]</td>
+		    </tr>
+		    <tr>
+		     <td class="text-center" style="color: gray;" width="15%">테마</td>
+		     <td width="55%">[[${vo.theme}]]</td>
+		    </tr>
+		    
+		    <tr>
+		    <td class="text-center" width="15%">좋아요</td>
+		     <td width="55%"><img src="/images/하트.png" style="width: 20px;height: 20px;display:inline-block;">
+								 ([[${vo.hit}]])</td>
+		    </tr>
+		   </tbody>
+		  </table>
+		  <table class="table">
+		   <tr>
+		    <td>[[${vo.content}]]</td>
+		   </tr>
+		   <tr>
+		    <td class="text-right">
+		     <a href="#" class="btn btn-sm btn-success">찜하기</a>
+		     <a href="#" class="btn btn-sm btn-danger">예약하기</a>
+		     <a href="/food/list" class="btn btn-sm btn-info">목록</a>
+		    </td>
+		   </tr>
+		  </table>
+	  </div>
+	  <div class="row aln-center" style="margin-top: 0px;">
+	   <table  th:if="${session.id!=null}">
+	    <tr>
+	     <td>
+	      <textarea rows="4" cols="130" style="float: left;margin-left: 30px;"></textarea>
+	      <button type="button" class="btn-info" style="width: 105px;height: 86px;float: left;">댓글 쓰기</button>
+	     </td>
+	    </tr>
+	   </table>
+  	</div>
+  </div>
+</div>
+<script>
+ const commentApp=Vue.createApp({
+	 // Model = 데이터 관리 => 변수가 변경이 되면 => HTML에 적용
+	 data(){
+		 return {
+			 // 멤버변수
+			 
+		 }
+	 },
+	 // VM => 변수를 변경하는 곳 
+	 /*
+	 	callback : Vue의 생명
+	 	= created() : 설정 => Vue객체 생성 완료
+	 	*** = mounted() : 브라우제엇 HTML을 변역 후 출력 완료
+	 	= updated() : 멤버변수가 변경된 경우
+	 	= unmounted() : 화면 변경 => Vue객체가 소멸
+	 	
+	 	사용자 요청 == VM 작업 == 결과값 : Model == View(HTML)
+	 	
+	 	가상돔 => 일부만 관리
+	 	-------- 임시 메모리에 저장 ====== 실제 돔(브라우저에서 읽어서 출력)
+	 */
+	 mounted(){
+		 // 자동 호출
+		 // jquery / react
+		 /*
+		 	$(function(){
+		 		$('#a').click(function(){})
+		 	})
+		 	
+		 	=> useEffect(()=>{
+		 		axios.get()
+		 	},[curpage])
+		 	query([curpage])
+		 	})
+		 */
+	 },
+	 methods:{
+		 // 사용자 정의 기능 => 요청 처리
+	 },
+	 computed:{
+		 // 시간, 가격, 총금액 => Format
+	 },
+	 components:{
+		 // 여러개의 기능을 처리 => include
+	 }
+	 // HTML출력하는 영역 => <template> => View =. MVVM
+ })
+ commentApp.config.compilerOptions.delimiters=['((','))']
+ commentApp.mount("#main-wrapper")
+</script>
+</body>
+</html>

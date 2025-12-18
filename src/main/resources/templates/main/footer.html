@@ -15,7 +15,7 @@
 					<section class="widget links">
 						<h3>맛집 Top 10</h3>
 						<ul class="style2">
-							<li th:each="vo:${fList}"><a href="#">[[${vo.name}]]</a></li>
+							<li th:each="vo:${fList}"><a th:href="@{/food/detail(fno=${vo.fno})}">[[${vo.name}]]</a></li>
 						</ul>
 					</section>
 
@@ -24,13 +24,9 @@
 
 					<!-- Links -->
 					<section class="widget links">
-						<h3>레시피 Top 10</h3>
+						<h3>쉐프 Top 10</h3>
 						<ul class="style2">
-							<li><a href="#">Etiam feugiat condimentum</a></li>
-							<li><a href="#">Aliquam imperdiet suscipit odio</a></li>
-							<li><a href="#">Sed porttitor cras in erat nec</a></li>
-							<li><a href="#">Felis varius pellentesque potenti</a></li>
-							<li><a href="#">Nullam scelerisque blandit leo</a></li>
+							<li th:each="rvo:${rList}"><a href="#">[[${rvo.chef}]]([[${rvo.hit}]])</a></li>
 						</ul>
 					</section>
 

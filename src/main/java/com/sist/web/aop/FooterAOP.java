@@ -1,5 +1,5 @@
 package com.sist.web.aop;
-import java.util.*;
+import java.util.*; 
 
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
@@ -66,6 +66,7 @@ import lombok.RequiredArgsConstructor;
 public class FooterAOP {
 	// FoodController => fservice 동일(싱글턴으로 저장)
 	private final FoodService fservice;
+	private final RecipeService rservice;
 	
 	@After("execution(* com.sist.web.controller.*Controller.*(..))")
 	public void after()
@@ -73,5 +74,7 @@ public class FooterAOP {
 		HttpServletRequest request=((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 	    List<FoodVO> fList=fservice.foodTop10Data();
 	    request.setAttribute("fList", fList);
+	    List<RecipeVO> rList=rservice.recipeTop10();
+	    request.setAttribute("rList", rList);
 	}
 }

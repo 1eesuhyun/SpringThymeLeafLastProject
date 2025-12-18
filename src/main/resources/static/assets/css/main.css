@@ -2571,9 +2571,10 @@ input, select, textarea {
 			}
 
 				.box.feature {
-					margin: 20px 0 0 0 !important;
-					padding: 0;
-				}
+			         max-height:500px;
+			         min-height:500px;
+			         padding: 0;
+			      }
 
 					.box.feature .inner {
 						padding: 30px 15px 30px 15px;
@@ -2684,5 +2685,10 @@ input, select, textarea {
 			#copyright {
 				text-align: left;
 			}
-
+	}
+	.fontc {
+		color:gray;
+	}
+	.detailcolor {
+		background-color: white;
 	}
