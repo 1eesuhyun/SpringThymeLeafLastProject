@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.sist.web.service.*;
 import com.sist.web.vo.*;
+
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 /*
  *  HttpServletRequest
@@ -43,6 +45,10 @@ import lombok.RequiredArgsConstructor;
  *  delete      new
  *  
  *  XML => 변경(어노테이션)
+ *  
+ *  1. 전송 / 처리 / 결과값 출력
+ *     -------------------
+ *     | 요청        | 결과값
  */
 @Controller
 @RequiredArgsConstructor
@@ -78,10 +84,30 @@ public class RecipeController {
 		return "main/main";
 	}
 	@GetMapping("detail")
-	public String recipe_detail(@RequestParam("no") int no,Model model)
+	public String recipe_detail(@RequestParam("no") int no,Model model,HttpSession session)
 	{
 		RecipeDetailVO vo=rservice.recipeDetailData(no);
+		List<String> mList=new ArrayList<String>();
+		List<String> nList=new ArrayList<String>();
+		String[] datas=vo.getFoodmake().split("\n");
+		for(String s:datas)
+		{
+			StringTokenizer st=new StringTokenizer(s,"^");
+			mList.add(st.nextToken());
+			nList.add(st.nextToken());
+		}
+		model.addAttribute("mList", mList);
+		model.addAttribute("nList", nList);
 		model.addAttribute("vo", vo);
+		String id=(String)session.getAttribute("id");
+		if(id==null)
+		{
+			model.addAttribute("sessionId", "");
+		}
+		else
+		{
+			model.addAttribute("sessionId", id);
+		}
 		// 댓글
 		model.addAttribute("main_html", "recipe/detail");
 		return "main/main";

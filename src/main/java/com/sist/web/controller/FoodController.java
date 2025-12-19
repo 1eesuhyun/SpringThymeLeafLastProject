@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.*;
 import com.sist.web.vo.*;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 import com.sist.web.service.*;
@@ -43,9 +44,18 @@ public class FoodController {
 		return "main/main";
 	}
 	@GetMapping("/food/detail")
-	public String food_detail(@RequestParam("fno") int fno,Model model)
+	public String food_detail(@RequestParam("fno") int fno,Model model,HttpSession session)
 	{
 		FoodVO vo=fservice.foodDetailData(fno);
+		String id=(String)session.getAttribute("id");
+		if(id==null)
+		{
+			model.addAttribute("sessionId", "");
+		}
+		else
+		{
+			model.addAttribute("sessionId", id);
+		}
 		model.addAttribute("vo", vo);
 		model.addAttribute("main_html", "food/detail");
 		return"main/main";

@@ -18,5 +18,5 @@ public class RecipeDetailVO {
 	FOODMAKE        VARCHAR2(4000)
  */
 	private int no;
-	private String poster,totle,chef,chef_poster,chef_profile,info1,info2,info3,content,foodmake;
+	private String poster,title,chef,chef_poster,chef_profile,info1,info2,info3,content,foodmake;
 }

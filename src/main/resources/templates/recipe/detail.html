@@ -9,14 +9,248 @@
 		<div class="container">
 			<div class="row">
 				<table class="table">
-				 <tr>
-				  <td class="aln-center">
-				   <img th:src="${vo.poster}" style="width: 800px;height: 250px;" onerror="this.src='/images/noimage.png'">
+				 <tr class="text-center">
+				  <td colspan="3">
+				   <img th:src="${vo.poster}" style="width: 750px;height: 450px;" onerror="this.src='/images/noimage.png'">
 				  </td>
+				 </tr>
+				 <tr>
+				  <td class="text-center" colspan="3"><h3>[[${vo.title}]]</h3></td>
+				 </tr>
+				 <tr>
+				  <td class="text-center"><img src="/images/a1.png"></td>
+				  <td class="text-center"><img src="/images/a2.png"></td>
+				  <td class="text-center"><img src="/images/a3.png"></td>
+				 </tr>
+				 <tr>
+				  <td class="text-center">[[${vo.info1}]]</td>
+				  <td class="text-center">[[${vo.info2}]]</td>
+				  <td class="text-center">[[${vo.info3}]]</td>
+				 </tr>
+				</table>
+				<table class="table">
+				 <tr>
+				  <td colspan="2" class="text-center"><h4><b>[조리순서]</b></h4></td>
+				 </tr>
+				 <tr th:each="data,status:${mList}">
+				  <td class="text-left" width="80%" style="font-size: 15px;color: black;">[[${data}]]</td>
+				  <td class="text-right" width="20%">
+				   <img th:src="${nList[status.index]}" style="width: 150px;height: 100px;" class="img-rounded">
+				  </td>
+				  <!-- 
+				  		status
+				  		status.index => ArrayList의 index
+				  		status.count => ArrayList의 총 갯수
+				  		status.last => ArrayList의 저장된 마지막 값
+				  		status.first => 첫 번째 값
+				  		status.even => 짝수
+				  		status.odd => 홀수
+				  		
+				  		=> StringTokenizer
+				  		=> <c:forTokens>
+				  		=> ${#strings.split(문자열,'구분자'}
+				   -->
+				 </tr>
+				</table>
+				<table class="table">
+				 <tr>
+				  <td width="20%" class="text-center" rowspan="2">
+				   <img th:src="${vo.chef_poster}" style="width: 120px;height: 120px;" class="img-circle">
+				  </td>
+				  <td width="80%">쉐프명: [[${vo.chef}]]</td>
+				 </tr>
+				 <tr>
+				  <td width="80%">[[${vo.chef_profile}]]</td> 
 				 </tr>
 				</table>
 			</div>
-		</div>
-	</div>
+		<div class="row aln-center" style="margin-top: 0px;">
+	  <table class="table">
+	   <tr>
+	    <td>
+	     <table class="table" v-for="rvo in list">
+	      <tr>
+	       <td class="text-left" width="80%">
+	        🤡((rvo.name))&nbsp;((rvo.dbday))
+	       </td>
+	       <td class="text-right" width="20%">
+	       <span v-if="sessionId==rvo.id">
+	        <button type="button" class="btn-xs btn-info upbtn" :id="'u'+rvo.no" @click="replyUpdateForm(rvo.no)">수정</button>
+	        <button type="button" class="btn-xs btn-danger" @click="replyDelete(rvo.no)">삭제</button>
+	        </span>
+	       </td>
+	      </tr>
+	      <tr>
+	       <td colspan="2" class="text-left">
+	        <pre style="white-space: pre-wrap;background-color: white;border: none;">((rvo.msg))</pre>
+	       </td>
+	      </tr>
+	      <tr>
+	       <td colspan="2">
+	        <table  class="table" style="display: none;" :id="'up'+rvo.no">
+			    <tr>
+			     <td>
+			      <textarea rows="4" cols="130" style="float: left;margin-left: 30px;" :id="'umsg'+rvo.no">((rvo.msg))</textarea>
+			      <button type="button" class="btn-info" style="width: 105px;height: 86px;float: left;" @click="replyUpdate(rvo.no)">수정하기</button>
+			     </td>
+			    </tr>
+		   </table>
+	       </td>
+	      </tr>
+	     </table>
+	    </td>
+	   </tr> 
+	  </table>
+	   <table  th:if="${session.id!=null}">
+	    <tr>
+	     <td>
+	      <textarea rows="4" cols="130" style="float: left;margin-left: 30px;" v-model="msg" ref="msg"></textarea>
+	      <button type="button" class="btn-info" style="width: 105px;height: 86px;float: left;" @click="insert()">댓글 쓰기</button>
+	     </td>
+	    </tr>
+	   </table>
+  	</div>
+  </div>
+</div>
+<script>
+ const commentApp=Vue.createApp({
+	 // Model = 데이터 관리 => 변수가 변경이 되면 => HTML에 적용
+	 data(){
+		 return {
+			 // 멤버변수
+			 list:[],
+			 cno:'[[${vo.no}]]',
+			 sessionId:'[[${sessionId}]]',
+			 msg:'',
+			 type:2,
+			 up:false
+		 }
+	 },
+	 // VM => 변수를 변경하는 곳 
+	 /*
+	 	callback : Vue의 생명
+	 	= created() : 설정 => Vue객체 생성 완료
+	 	*** = mounted() : 브라우제엇 HTML을 변역 후 출력 완료
+	 	= updated() : 멤버변수가 변경된 경우
+	 	= unmounted() : 화면 변경 => Vue객체가 소멸
+	 	
+	 	사용자 요청 == VM 작업 == 결과값 : Model == View(HTML)
+	 	
+	 	가상돔 => 일부만 관리
+	 	-------- 임시 메모리에 저장 ====== 실제 돔(브라우저에서 읽어서 출력)
+	 */
+	 mounted(){
+		 // 자동 호출
+		 // jquery / react
+		 /*
+		 	$(function(){
+		 		$('#a').click(function(){})
+		 	})
+		 	
+		 	=> useEffect(()=>{
+		 		axios.get()
+		 	},[curpage])
+		 	query([curpage])
+		 	})
+		 */
+		 axios.get('http://localhost/comment/list_vue/',{
+			 params:{
+				 cno:this.cno,
+				 type:this.type
+			 }
+		 }).then(response=>{
+			 console.log(response.data)
+			 this.list=response.data.list
+			 this.cno=response.data.cno
+			 this.type=response.data.type
+		 })
+	 },
+	 methods:{
+		 // 사용자 정의 기능 => 요청 처리
+		 insert(){
+			 if(this.msg==="")
+		     {
+				 this.$refs.msg.focus()
+				 return
+		     }
+			 axios.post('http://localhost/comment/insert_vue/',{
+				 cno:this.cno,
+				 type:this.type,
+				 msg:this.msg
+			 }).then(response=>{
+				 console.log(response.data)
+				 this.list=response.data.list
+				 this.cno=response.data.cno
+				 this.type=response.data.type
+		    })
+		    this.msg=""
+		    this.$refs.msg.focus()
+		 },
+		 replyDelete(no){
+			 axios.get('http://localhost/comment/delete_vue/',{
+				 params:{
+					 no:no,
+					 cno:this.cno,
+					 type:this.type
+				 }
+			 }).then(response=>{
+				 console.log(response.data)
+				 this.list=response.data.list
+				 this.cno=response.data.cno
+				 this.type=response.data.type
+		    })
+		 },
+		 replyUpdateForm(no){
+			 $('.ups').hide()
+			 $('.upbtn').text("수정")
+			 if(this.up===false)
+			 {
+				 this.up=true
+				 $('#up'+no).show()
+				 $('#u'+no).text("취소")
+			 }
+			 else
+			 {
+				 this.up=false
+				 $('#up'+no).hide()
+				 $('#u'+no).text("수정")
+			 }
+		 },
+		 replyUpdate(no){
+			let msg=$('#umsg'+no).val()
+			if(msg==="")
+			{
+				$('#umsg'+no).focus()
+				return
+			}
+			axios.get('http://localhost/comment/update_vue/',{
+				params:{
+					no:no,
+					cno:this.cno,
+					type:this.type,
+					msg:msg
+				}
+			}).then(response=>{
+				 console.log(response.data)
+				 this.list=response.data.list
+				 this.cno=response.data.cno
+				 this.type=response.data.type
+				 $('#up'+no).hide()
+				 $('#u'+no).text("수정")
+		    })
+		 }
+		 
+	 },
+	 computed:{
+		 // 시간, 가격, 총금액 => Format
+	 },
+	 components:{
+		 // 여러개의 기능을 처리 => include
+	 }
+	 // HTML출력하는 영역 => <template> => View =. MVVM
+ })
+ commentApp.config.compilerOptions.delimiters=['((','))']
+ commentApp.mount("#main-wrapper")
+</script>			
 </body>
 </html>
